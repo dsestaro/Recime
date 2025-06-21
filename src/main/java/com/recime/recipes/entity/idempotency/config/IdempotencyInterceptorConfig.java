@@ -7,10 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.recime.recipes.entity.idempotency.interceptor.IdempotencyInterceptor;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-@Slf4j
 @AllArgsConstructor
 public class IdempotencyInterceptorConfig implements WebMvcConfigurer {
 
