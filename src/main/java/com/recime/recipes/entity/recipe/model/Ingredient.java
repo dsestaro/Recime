@@ -25,7 +25,7 @@ public class Ingredient {
 	private String name;
 	
 	@Column
-	private ServingUnit unit;
+	private ServingUnitEnum unit;
 	
 	@Column
 	private double quantity;

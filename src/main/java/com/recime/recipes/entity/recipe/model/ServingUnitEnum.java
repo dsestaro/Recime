@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum ServingUnit {
+public enum ServingUnitEnum {
 	
 	GRAM("g"),
 	KILOGRAM("kg"),
