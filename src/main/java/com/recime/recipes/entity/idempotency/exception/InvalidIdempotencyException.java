@@ -1,9 +1,9 @@
 package com.recime.recipes.entity.idempotency.exception;
 
 
-public class InvalidImdepotencyException extends RuntimeException {
+public class InvalidIdempotencyException extends RuntimeException {
 	
-	public InvalidImdepotencyException() {
+	public InvalidIdempotencyException() {
         super("Idempotency-Key header not found.");
     }
 }

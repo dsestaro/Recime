@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.recime.recipes.entity.idempotency.exception.InvalidImdepotencyException;
+import com.recime.recipes.entity.idempotency.exception.InvalidIdempotencyException;
 import com.recime.recipes.entity.idempotency.repository.IdempotencyRespository;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +33,7 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 		
 		if(key == null) {
 			log.warn("Idempotency-Key header not found.");
-			throw new InvalidImdepotencyException();
+			throw new InvalidIdempotencyException();
 		}
 		
 		return true;
