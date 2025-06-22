@@ -49,7 +49,7 @@ public class RecipeGenerator {
 			instructions.add(instruction);
 		}
 		
-		recipe.setIntructions(instructions);
+		recipe.setInstructions(instructions);
 		
 		return recipe;
 	}

@@ -10,6 +10,7 @@ import com.recime.recipes.entity.recipe.dto.IngredientDTO;
 import com.recime.recipes.entity.recipe.dto.InstructionDTO;
 import com.recime.recipes.entity.recipe.dto.RecipeDTO;
 import com.recime.recipes.entity.recipe.exception.IngredientNotFoundException;
+import com.recime.recipes.entity.recipe.exception.InstructionNotFoundException;
 import com.recime.recipes.entity.recipe.exception.InvalidIdException;
 import com.recime.recipes.entity.recipe.exception.InvalidIdLinkException;
 import com.recime.recipes.entity.recipe.exception.RecipeNotFoundException;
@@ -84,7 +85,7 @@ public class RecipeService {
 
 	public RecipeDTO update(RecipeDTO recipeDTO) {
 
-		if (recipeDTO.getId() == null && recipeDTO.getId() == 0) {
+		if (recipeDTO.getId() == null || recipeDTO.getId() == 0) {
 			log.error("Recipe ID not found when trying to update a recipe");
 			throw new InvalidIdException("recipe");
 		}
@@ -139,11 +140,11 @@ public class RecipeService {
 				if (instruction.isEmpty()) {
 					log.debug("Instruction with ID {} not found.", instructionDTO.getId());
 
-					throw new IngredientNotFoundException(
+					throw new InstructionNotFoundException(
 							String.format("Instruction with ID %d not found.", instructionDTO.getId()));
 				}
 
-				if (!existingRecipe.get().getIntructions().contains(instruction.get())) {
+				if (!existingRecipe.get().getInstructions().contains(instruction.get())) {
 					throw new InvalidIdLinkException("instruction", instructionDTO.getId());
 				}
 
@@ -152,8 +153,8 @@ public class RecipeService {
 			}
 		}
 
-		existingRecipe.get().getIntructions().clear();
-		existingRecipe.get().getIntructions().addAll(updatedInstructions);
+		existingRecipe.get().getInstructions().clear();
+		existingRecipe.get().getInstructions().addAll(updatedInstructions);
 
 		return RecipeMapper.toDto(this.recipeRepository.save(existingRecipe.get()));
 	}

@@ -35,7 +35,7 @@ public class RecipeMapper {
 		if (dto.getInstructions() != null) {
 			List<Instruction> instructions = dto.getInstructions().stream().map(RecipeMapper::instructionDtoToEntity)
 					.collect(Collectors.toList());
-			recipe.setIntructions(instructions);
+			recipe.setInstructions(instructions);
 		}
 
 		return recipe;
@@ -76,8 +76,8 @@ public class RecipeMapper {
 			dto.setIngredients(ingredientDTOs);
 		}
 
-		if (entity.getIntructions() != null) {
-			List<InstructionDTO> instructionDTOs = entity.getIntructions().stream()
+		if (entity.getInstructions() != null) {
+			List<InstructionDTO> instructionDTOs = entity.getInstructions().stream()
 					.map(RecipeMapper::instructionEntityToDto).collect(Collectors.toList());
 			dto.setInstructions(instructionDTOs);
 		}

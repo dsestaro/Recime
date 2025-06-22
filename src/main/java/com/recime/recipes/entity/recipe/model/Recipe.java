@@ -42,5 +42,5 @@ public class Recipe {
 	private List<Ingredient> ingredients;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Instruction> intructions;
+	private List<Instruction> instructions;
 }
