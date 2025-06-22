@@ -6,6 +6,8 @@ import com.recime.recipes.entity.recipe.dto.IngredientDTO;
 import com.recime.recipes.entity.recipe.dto.InstructionDTO;
 import com.recime.recipes.entity.recipe.dto.RecipeDTO;
 import com.recime.recipes.entity.recipe.exception.InvalidIdException;
+import com.recime.recipes.entity.recipe.mapper.RecipeMapper;
+import com.recime.recipes.entity.recipe.model.Recipe;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ public class RecipeService {
 				throw new InvalidIdException("instruction");
 			}
 		}
+		
+		Recipe recipe = RecipeMapper.toEntity(recipeDTO);
 		
 		return recipeDTO;
 	}
