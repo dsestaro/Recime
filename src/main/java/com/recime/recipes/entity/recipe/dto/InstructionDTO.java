@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InstructionDTO {
 	
-	private int id;
+	private Integer id;
 	
 	@NotEmpty(message = "Instruction text cannot be empty.")
 	private String text;

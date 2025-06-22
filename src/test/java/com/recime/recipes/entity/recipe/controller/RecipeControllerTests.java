@@ -318,6 +318,46 @@ public class RecipeControllerTests {
         	.andExpect(status().isBadRequest())
         	.andExpect(jsonPath("$.field", is("recipe")));
 	}
+	
+	@Test
+	public void recipeCreationReturnBadRequestInCaseOfPresenceOfIngredientId() throws Exception {
+		
+		RecipeDTO recipe = RecipeDTOGenerator.populateRecipeDTO();
+		
+		recipe.setId(null);
+		
+		MockHttpServletRequestBuilder requestBuilder = post("/recipe")
+                .content(convertObjectToJsonString(recipe))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Idempotency-Key", "1");
+		
+		this.mockMvc.perform(requestBuilder)
+        	.andExpect(status().isBadRequest())
+        	.andExpect(jsonPath("$.field", is("ingredient")));
+	}
+	
+	@Test
+	public void recipeCreationReturnBadRequestInCaseOfPresenceOfInstructionId() throws Exception {
+		
+		RecipeDTO recipe = RecipeDTOGenerator.populateRecipeDTO();
+		
+		recipe.setId(null);
+		
+		for(IngredientDTO ingredient : recipe.getIngredients()) {
+			ingredient.setId(null);
+		}
+		
+		MockHttpServletRequestBuilder requestBuilder = post("/recipe")
+                .content(convertObjectToJsonString(recipe))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Idempotency-Key", "1");
+		
+		this.mockMvc.perform(requestBuilder)
+        	.andExpect(status().isBadRequest())
+        	.andExpect(jsonPath("$.field", is("instruction")));
+	}
 
 	private String convertObjectToJsonString(Object object) {
         try {
