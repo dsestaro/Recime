@@ -1,227 +1,278 @@
 {
-  "openapi": "3.0.0",
-  "servers": [],
-  "info": {
-    "description": "Recime Recipe test APIs",
-    "version": "1.0.0",
-    "title": "Recime",
-    "contact": {
-      "email": "dsestaro@gmail.com"
-    }
-  },
-  "tags": [
-    {
-      "name": "Recipe",
-      "description": "Recipe operations."
-    }
-  ],
-  "paths": {
-    "/recipe": {
-      "post": {
-        "tags": [
-          "Recipe"
-        ],
-        "summary": "Creates a recipe",
-        "operationId": "createRecipe",
-        "description": "Creates a recipe",
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "required": true,
-            "description": "A unique key to ensure idempotent creation requests.",
-            "schema": {
-              "type": "string",
-              "example": "a7b8c9d0-1234-5678-9012-abcdef123456"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Recipe"
-                }
-              }
-            }
-          },
-          "202": {
-            "description": "Recipe already being created"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessage"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Recipe"
-              }
-            }
-          },
-          "description": "Recipe to be created"
-        }
-      }
-    },
-    "/recipe/{id}": {
-      "get": {
-        "tags": [
-          "Recipe"
-        ],
-        "summary": "Retrieves a recipe",
-        "operationId": "getRecipe",
-        "description": "Retrieves a recipe from the database",
-        "parameters": [
-          {
-            "name": "ID",
-            "in": "path",
-            "required": true,
-            "description": "ID of the recipe.",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Recipe"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recipe not found."
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Recipe": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1
-          },
-          "title": {
-            "type": "string",
-            "example": "Spaghetti Bolognese"
-          },
-          "description": {
-            "type": "string",
-            "example": "A classic Italian pasta dish."
-          },
-          "servings": {
-            "type": "integer",
-            "example": 4
-          },
-          "vegetarian": {
-            "type": "boolean",
-            "example": false
-          },
-          "ingredients": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Ingredient"
-            }
-          },
-          "instructions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Instruction"
-            }
-          }
-        }
-      },
-      "Ingredient": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1
-          },
-          "name": {
-            "type": "string",
-            "example": "Tomato Sauce"
-          },
-          "unit": {
-            "$ref": "#/components/schemas/ServingUnitEnum"
-          },
-          "quantity": {
-            "type": "number",
-            "format": "double",
-            "example": 200.5
-          }
-        }
-      },
-      "Instruction": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32",
-            "example": 1
-          },
-          "text": {
-            "type": "string",
-            "example": "Heat olive oil in a large pan and sauté onions until soft."
-          }
-        }
-      },
-      "ServingUnitEnum": {
-        "type": "string",
-        "description": "Measurement unit for ingredient quantities.",
-        "enum": [
-          "GRAM",
-          "KILOGRAM",
-          "MILLILITER",
-          "LITER",
-          "PIECE",
-          "SLICE",
-          "CUP",
-          "TABLESPOON",
-          "TEASPOON",
-          "PACKAGE",
-          "BOTTLE",
-          "CAN",
-          "PORTION",
-          "SCOOP",
-          "BAR"
-        ],
-        "example": "GRAM"
-      },
-      "ErrorMessage": {
-        "type": "object",
-        "properties": {
-          "field": {
-            "type": "string",
-            "example": "title"
-          },
-          "message": {
-            "type": "string",
-            "example": "Recipe title cannot be empty."
-          }
-        }
-      }
-    }
-  }
+	"openapi": "3.0.0",
+	"servers": [],
+	"info": {
+		"description": "Recime Recipe test APIs",
+		"version": "1.0.0",
+		"title": "Recime",
+		"contact": {
+			"email": "dsestaro@gmail.com"
+		}
+	},
+	"tags": [
+		{
+			"name": "Recipe",
+			"description": "Recipe operations."
+		}
+	],
+	"paths": {
+		"/recipe": {
+			"post": {
+				"tags": [
+					"Recipe"
+				],
+				"summary": "Creates a recipe",
+				"operationId": "createRecipe",
+				"description": "Creates a recipe",
+				"parameters": [
+					{
+						"name": "Idempotency-Key",
+						"in": "header",
+						"required": true,
+						"description": "A unique key to ensure idempotent creation requests.",
+						"schema": {
+							"type": "string",
+							"example": "a7b8c9d0-1234-5678-9012-abcdef123456"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Recipe created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Recipe"
+								}
+							}
+						}
+					},
+					"202": {
+						"description": "Recipe already being created"
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorMessage"
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Recipe"
+							}
+						}
+					},
+					"description": "Recipe to be created"
+				}
+			},
+			"put": {
+				"tags": [
+					"Recipe"
+				],
+				"summary": "Updates a recipe",
+				"operationId": "updateRecipe",
+				"description": "Updates an existing recipe",
+				"responses": {
+					"200": {
+						"description": "Recipe updates",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Recipe"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorMessage"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"example": "Recipe with ID 1 not found."
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Recipe"
+							}
+						}
+					},
+					"description": "Recipe to be created"
+				}
+			}
+		},
+		"/recipe/{id}": {
+			"get": {
+				"tags": [
+					"Recipe"
+				],
+				"summary": "Retrieves a recipe",
+				"operationId": "getRecipe",
+				"description": "Retrieves a recipe from the database",
+				"parameters": [
+					{
+						"name": "ID",
+						"in": "path",
+						"required": true,
+						"description": "ID of the recipe.",
+						"schema": {
+							"type": "integer",
+							"example": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Recipe found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Recipe"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Recipe not found."
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"Recipe": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer",
+						"format": "int32",
+						"example": 1
+					},
+					"title": {
+						"type": "string",
+						"example": "Spaghetti Bolognese"
+					},
+					"description": {
+						"type": "string",
+						"example": "A classic Italian pasta dish."
+					},
+					"servings": {
+						"type": "integer",
+						"example": 4
+					},
+					"vegetarian": {
+						"type": "boolean",
+						"example": false
+					},
+					"ingredients": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Ingredient"
+						}
+					},
+					"instructions": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/Instruction"
+						}
+					}
+				}
+			},
+			"Ingredient": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer",
+						"format": "int32",
+						"example": 1
+					},
+					"name": {
+						"type": "string",
+						"example": "Tomato Sauce"
+					},
+					"unit": {
+						"$ref": "#/components/schemas/ServingUnitEnum"
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double",
+						"example": 200.5
+					}
+				}
+			},
+			"Instruction": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "integer",
+						"format": "int32",
+						"example": 1
+					},
+					"text": {
+						"type": "string",
+						"example": "Heat olive oil in a large pan and sauté onions until soft."
+					}
+				}
+			},
+			"ServingUnitEnum": {
+				"type": "string",
+				"description": "Measurement unit for ingredient quantities.",
+				"enum": [
+					"GRAM",
+					"KILOGRAM",
+					"MILLILITER",
+					"LITER",
+					"PIECE",
+					"SLICE",
+					"CUP",
+					"TABLESPOON",
+					"TEASPOON",
+					"PACKAGE",
+					"BOTTLE",
+					"CAN",
+					"PORTION",
+					"SCOOP",
+					"BAR"
+				],
+				"example": "GRAM"
+			},
+			"ErrorMessage": {
+				"type": "object",
+				"properties": {
+					"field": {
+						"type": "string",
+						"example": "title"
+					},
+					"message": {
+						"type": "string",
+						"example": "Recipe title cannot be empty."
+					}
+				}
+			}
+		}
+	}
 }
