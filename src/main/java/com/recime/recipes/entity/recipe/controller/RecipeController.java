@@ -47,7 +47,7 @@ public class RecipeController {
     }
 
 	@PutMapping
-    public RecipeDTO getRecipe(@Valid @RequestBody RecipeDTO recipe){
+    public RecipeDTO updateRecipe(@Valid @RequestBody RecipeDTO recipe){
 		log.info("Updating recipe {}.", recipe.getTitle());
 		
 		recipe = this.recipeService.update(recipe);
