@@ -13,48 +13,97 @@ import com.recime.recipes.entity.recipe.model.Recipe;
 public class RecipeMapper {
 	
 	public static Recipe toEntity(RecipeDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+		if (dto == null) {
+			return null;
+		}
 
-        Recipe recipe = new Recipe();
-        
-        recipe.setId(dto.getId());
+		Recipe recipe = new Recipe();
 
-        recipe.setTitle(dto.getTitle());
-        recipe.setDescription(dto.getDescription());
-        recipe.setServings(dto.getServings());
-        recipe.setVegetarian(dto.isVegetarian());
+		recipe.setId(dto.getId());
 
-        if (dto.getIngredients() != null) {
-            List<Ingredient> ingredients = dto.getIngredients().stream()
-                    .map(RecipeMapper::ingredientDtoToEntity)
-                    .collect(Collectors.toList());
-            recipe.setIngredients(ingredients);
-        }
+		recipe.setTitle(dto.getTitle());
+		recipe.setDescription(dto.getDescription());
+		recipe.setServings(dto.getServings());
+		recipe.setVegetarian(dto.isVegetarian());
 
-        if (dto.getInstructions() != null) {
-            List<Instruction> instructions = dto.getInstructions().stream()
-                    .map(RecipeMapper::instructionDtoToEntity)
-                    .collect(Collectors.toList());
-            recipe.setIntructions(instructions);
-        }
+		if (dto.getIngredients() != null) {
+			List<Ingredient> ingredients = dto.getIngredients().stream().map(RecipeMapper::ingredientDtoToEntity)
+					.collect(Collectors.toList());
+			recipe.setIngredients(ingredients);
+		}
 
-        return recipe;
-    }
+		if (dto.getInstructions() != null) {
+			List<Instruction> instructions = dto.getInstructions().stream().map(RecipeMapper::instructionDtoToEntity)
+					.collect(Collectors.toList());
+			recipe.setIntructions(instructions);
+		}
 
-    private static Ingredient ingredientDtoToEntity(IngredientDTO dto) {
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId(dto.getId());
-        ingredient.setName(dto.getName());
-        ingredient.setQuantity(dto.getQuantity());
-        return ingredient;
-    }
+		return recipe;
+	}
 
-    private static Instruction instructionDtoToEntity(InstructionDTO dto) {
-        Instruction instruction = new Instruction();
-        instruction.setId(dto.getId());
-        instruction.setText(dto.getText());
-        return instruction;
-    }
+	private static Ingredient ingredientDtoToEntity(IngredientDTO dto) {
+		Ingredient ingredient = new Ingredient();
+		ingredient.setId(dto.getId());
+		ingredient.setName(dto.getName());
+		ingredient.setQuantity(dto.getQuantity());
+		return ingredient;
+	}
+
+	private static Instruction instructionDtoToEntity(InstructionDTO dto) {
+		Instruction instruction = new Instruction();
+		instruction.setId(dto.getId());
+		instruction.setText(dto.getText());
+		return instruction;
+	}
+
+	public static RecipeDTO toDto(Recipe entity) {
+		if (entity == null) {
+			return null;
+		}
+
+		RecipeDTO dto = new RecipeDTO();
+
+		dto.setId(entity.getId());
+		dto.setTitle(entity.getTitle());
+		dto.setDescription(entity.getDescription());
+		dto.setServings(entity.getServings());
+		dto.setVegetarian(entity.isVegetarian());
+
+		if (entity.getIngredients() != null) {
+			List<IngredientDTO> ingredientDTOs = entity.getIngredients().stream()
+					.map(RecipeMapper::ingredientEntityToDto).collect(Collectors.toList());
+			dto.setIngredients(ingredientDTOs);
+		}
+
+		if (entity.getIntructions() != null) {
+			List<InstructionDTO> instructionDTOs = entity.getIntructions().stream()
+					.map(RecipeMapper::instructionEntityToDto).collect(Collectors.toList());
+			dto.setInstructions(instructionDTOs);
+		}
+
+		return dto;
+	}
+
+	private static IngredientDTO ingredientEntityToDto(Ingredient entity) {
+		if (entity == null) {
+			return null;
+		}
+
+		IngredientDTO dto = new IngredientDTO();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		dto.setQuantity(entity.getQuantity());
+		return dto;
+	}
+
+	private static InstructionDTO instructionEntityToDto(Instruction entity) {
+		if (entity == null) {
+			return null;
+		}
+
+		InstructionDTO dto = new InstructionDTO();
+		dto.setId(entity.getId());
+		dto.setText(entity.getText());
+		return dto;
+	}
 }
