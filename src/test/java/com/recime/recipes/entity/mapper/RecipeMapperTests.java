@@ -56,7 +56,7 @@ public class RecipeMapperTests {
 		assertEquals("Flour", ingredients.get(0).getName());
 		assertEquals(200, ingredients.get(0).getQuantity());
 
-		List<Instruction> instructions = entity.getIntructions();
+		List<Instruction> instructions = entity.getInstructions();
 		assertNotNull(instructions);
 		assertEquals(1, instructions.size());
 		assertEquals(1, instructions.get(0).getId());
@@ -88,7 +88,7 @@ public class RecipeMapperTests {
 		entity.setServings(8);
 		entity.setVegetarian(false);
 		entity.setIngredients(Arrays.asList(ingredient));
-		entity.setIntructions(Arrays.asList(instruction));
+		entity.setInstructions(Arrays.asList(instruction));
 
 		RecipeDTO dto = RecipeMapper.toDto(entity);
 
