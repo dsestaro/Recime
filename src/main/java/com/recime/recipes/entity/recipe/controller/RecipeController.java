@@ -7,16 +7,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.recime.recipes.entity.recipe.dto.RecipeDTO;
+import com.recime.recipes.entity.recipe.service.RecipeService;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/recipe")
+@AllArgsConstructor
 public class RecipeController {
 	
+	RecipeService recipeService;
+	
 	@PostMapping
-    public String createRecipe(@Valid @RequestBody RecipeDTO recipe){
-		return "Testing";
+    public RecipeDTO createRecipe(@Valid @RequestBody RecipeDTO recipe){
+		
+		log.info("Creating recipe {}.", recipe.getTitle());
+		
+		recipe = this.recipeService.create(recipe);
+		
+		log.info("Recipe {} created.", recipe.getTitle());
+		
+		return recipe;
     }
 	
 	@GetMapping

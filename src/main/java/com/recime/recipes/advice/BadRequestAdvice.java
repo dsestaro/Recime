@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.recime.recipes.advice.model.ErrorMessage;
 import com.recime.recipes.entity.idempotency.exception.InvalidIdempotencyException;
+import com.recime.recipes.entity.recipe.exception.InvalidIdException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +27,7 @@ public class BadRequestAdvice {
 	@ResponseStatus(BAD_REQUEST)
 	@ResponseBody
 	@ExceptionHandler(InvalidIdempotencyException.class)
-	public ErrorMessage methodInvalidDatesException(InvalidIdempotencyException ex) {
+	public ErrorMessage methodInvalidIdempotencyException(InvalidIdempotencyException ex) {
 		
 		log.warn(ex.getMessage());
 		
@@ -56,5 +57,20 @@ public class BadRequestAdvice {
 	    }
 	    
 	    return messages;
+	}
+	
+	@ResponseStatus(BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(InvalidIdException.class)
+	public ErrorMessage methodInvalidIdException(InvalidIdException ex) {
+		
+		log.warn(ex.getMessage());
+		
+		ErrorMessage message = new ErrorMessage();
+		
+		message.setField(ex.getField());
+		message.setMessage(ex.getMessage());
+		
+		return message;
 	}
 }
