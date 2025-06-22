@@ -156,7 +156,51 @@
 						}
 					},
 					"404": {
-						"description": "Recipe not found."
+						"description": "Recipe not found.",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"example": "Recipe with ID 1 not found."
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Recipe"
+				],
+				"summary": "Deletes a recipe",
+				"operationId": "deleteRecipe",
+				"description": "Deletes a recipe from the database",
+				"parameters": [
+					{
+						"name": "ID",
+						"in": "path",
+						"required": true,
+						"description": "ID of the recipe.",
+						"schema": {
+							"type": "integer",
+							"example": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Recipe delete"
+					},
+					"404": {
+						"description": "Recipe not found.",
+						"content": {
+							"text/plain": {
+								"schema": {
+									"type": "string",
+									"example": "Recipe with ID 1 not found."
+								}
+							}
+						}
 					}
 				}
 			}
