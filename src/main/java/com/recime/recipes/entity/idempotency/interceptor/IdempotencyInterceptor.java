@@ -33,12 +33,17 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 
 		String key = request.getHeader("Idempotency-Key");
 		if (key == null || key.isBlank()) {
+			log.error("Idempotency key not found in the request {} {}.", request.getMethod(), request.getRequestURI());
+			
 			throw new InvalidIdempotencyException();
 		}
 
 		Optional<Idempotency> existing = repository.findById(key);
 
 		if (existing.isPresent()) {
+			
+			log.debug("Existing request found with idempotency ID {}.", key);
+			
 			Idempotency cached = existing.get();
 			response.setStatus(cached.getStatus());
 			response.getWriter().write(cached.getResponse()); 
@@ -51,12 +56,16 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 			return false;
 		}
 		
+		log.debug("No previous request found with idempotency ID {}.", key);
+		
 		Idempotency cache = new Idempotency();
 		cache.setKey(key);
 		cache.setStatus(202);
 		
 		this.repository.save(cache);
 
+		log.debug("New entry created with idempotency ID {}.", key);
+		
 		return true;
 	}
 
@@ -74,6 +83,9 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 		}
 
 		if (response instanceof CachedBodyHttpServletResponse) {
+			
+			log.debug("Updating the response for the request with idempotency {}.", key);
+			
 			CachedBodyHttpServletResponse wrappedResponse = (CachedBodyHttpServletResponse) response;
 			String responseBody = wrappedResponse.getCapturedBodyAsString();
 
@@ -83,6 +95,8 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 			record.setResponse(responseBody);
 
 			repository.save(record);
+			
+			log.debug("Request with idempotency ID {} update successfully.", key);
 		}
 	}
 }

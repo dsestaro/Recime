@@ -25,18 +25,23 @@ public class RecipeService {
 	
 	public RecipeDTO create(RecipeDTO recipeDTO) {
 		
+		log.debug("Creating new recipe with title {}.", recipeDTO.getTitle());
+		
 		if(recipeDTO.getId() != null && recipeDTO.getId() != 0) {
+			log.error("Recipe ID found when trying to create a new recipe");
 			throw new InvalidIdException("recipe");
 		}
 		
 		for(IngredientDTO ingredient : recipeDTO.getIngredients()) {
 			if(ingredient.getId() != null && ingredient.getId() != 0) {
+				log.error("Ingredient ID found when trying to create a new recipe");
 				throw new InvalidIdException("ingredient");
 			}
 		}
 		
 		for(InstructionDTO instruction : recipeDTO.getInstructions()) {
 			if(instruction.getId() != null && instruction.getId() != 0) {
+				log.error("Instruction ID found when trying to create a new recipe");
 				throw new InvalidIdException("instruction");
 			}
 		}
@@ -45,17 +50,25 @@ public class RecipeService {
 		
 		recipe = this.recipeRepository.save(recipe);
 		
+		log.debug("Recipe with title {} create successfully.", recipeDTO.getTitle());
+		
 		return RecipeMapper.toDto(recipe);
 	}
 
 	public RecipeDTO findById(Integer id) {
 		
+		log.debug("Retrieving recipe with ID {}.", id);
+		
 		Optional<Recipe> recipe = this.recipeRepository.findById(id);
 		
 		if(recipe.isEmpty()) {
+			log.debug("Recipe with ID {} not found.", id);
+			
 			throw new RecipeNotFoundException();
 		}
 		
-		return null;
+		log.debug("Recipe with ID {} found.", id);
+		
+		return RecipeMapper.toDto(recipe.get());
 	}
 }
