@@ -50,6 +50,12 @@ public class IdempotencyInterceptor implements HandlerInterceptor {
 			((CachedBodyHttpServletResponse)response).copyBodyToResponse();
 			return false;
 		}
+		
+		Idempotency cache = new Idempotency();
+		cache.setKey(key);
+		cache.setStatus(202);
+		
+		this.repository.save(cache);
 
 		return true;
 	}

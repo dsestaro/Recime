@@ -19,11 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import com.recime.recipes.entity.idempotency.exception.InvalidIdempotencyException;
+import com.recime.recipes.entity.idempotency.model.CachedBodyHttpServletResponse;
 import com.recime.recipes.entity.idempotency.model.Idempotency;
 import com.recime.recipes.entity.idempotency.repository.IdempotencyRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class IdempotencyInterceptorTests {
@@ -35,7 +35,7 @@ public class IdempotencyInterceptorTests {
 	private HttpServletRequest request;
 	
 	@Mock
-	private HttpServletResponse response;
+	private CachedBodyHttpServletResponse response;
 
 	private IdempotencyInterceptor idempotencyInterceptor;
 	
