@@ -158,4 +158,21 @@ public class RecipeService {
 
 		return RecipeMapper.toDto(this.recipeRepository.save(existingRecipe.get()));
 	}
+
+	public void delete(Integer id) {
+		
+		log.debug("Deleting recipe with ID {}.", id);
+
+		Optional<Recipe> recipe = this.recipeRepository.findById(id);
+
+		if (recipe.isEmpty()) {
+			log.debug("Recipe with ID {} not found.", id);
+
+			throw new RecipeNotFoundException(String.format("Recipe with ID %d not found.", id));
+		}
+		
+		this.recipeRepository.delete(recipe.get());
+
+		log.debug("Recipe with ID {} deleted.", id);
+	}
 }

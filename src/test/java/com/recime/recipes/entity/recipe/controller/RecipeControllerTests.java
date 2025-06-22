@@ -2,6 +2,7 @@ package com.recime.recipes.entity.recipe.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -398,7 +399,7 @@ public class RecipeControllerTests {
 	@Test
 	public void recipeSearchReturnTheNotFoundWhenAnInvalidIDIsPassed() throws Exception {
 		
-		MockHttpServletRequestBuilder requestBuilder = get("/recipe/")
+		MockHttpServletRequestBuilder requestBuilder = get("/recipe/12")
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
 
 		this.mockMvc.perform(requestBuilder).andExpect(status().isNotFound());
@@ -514,6 +515,44 @@ public class RecipeControllerTests {
 		recipe = convertJsonToObject(result.getResponse().getContentAsString());
 		
 		assertEquals(3, recipe.getInstructions().size());
+	}
+	
+	@Test
+	public void recipeDeleteReturnTheSuccessWhenAValidIDIsPassed() throws Exception {
+
+		RecipeDTO recipe = RecipeDTOGenerator.populateRecipeDTO();
+
+		recipe.setId(null);
+
+		for (IngredientDTO ingredient : recipe.getIngredients()) {
+			ingredient.setId(null);
+		}
+
+		for (InstructionDTO instruction : recipe.getInstructions()) {
+			instruction.setId(null);
+		}
+
+		MockHttpServletRequestBuilder requestBuilder = post("/recipe").content(convertObjectToJsonString(recipe))
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.header("Idempotency-Key", "1");
+
+		MvcResult result = this.mockMvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
+		
+		int id = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+		
+		requestBuilder = delete("/recipe/" + id)
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+
+		this.mockMvc.perform(requestBuilder).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void recipeDeleteReturnTheNotFoundWhenAnInvalidIDIsPassed() throws Exception {
+		
+		MockHttpServletRequestBuilder requestBuilder = delete("/recipe/44")
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+
+		this.mockMvc.perform(requestBuilder).andExpect(status().isNotFound());
 	}
 
 	private String convertObjectToJsonString(Object object) {

@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.Optional;
@@ -288,5 +290,35 @@ public class RecipeServiceTests {
 		List<InstructionDTO> instructionDTOs = recipeDTO.getInstructions();
 		assertNotNull(instructionDTOs);
 		assertEquals(1, instructionDTOs.size());
+	}
+	
+	@Test
+	public void recipeDeleteReturnAnErrorWhenUsingAnInvalidId() {
+
+		doAnswer((Answer<Optional<Recipe>>) invocation -> {
+
+			Recipe recipe = null;
+
+			return Optional.ofNullable(recipe);
+		}).when(this.recipeRepository).findById(any());
+
+		assertThrows(RecipeNotFoundException.class, () -> this.recipeService.delete(1));
+	}
+	
+	@Test
+	public void recipeDeleteExecutesSuccessfullyWhenAnExistingIDIsPassed() {
+
+		doAnswer((Answer<Optional<Recipe>>) invocation -> {
+
+			Recipe recipe = RecipeGenerator.populateRecipe();
+
+			return Optional.ofNullable(recipe);
+		}).when(this.recipeRepository).findById(any());
+		
+		doNothing().when(this.recipeRepository).delete(any());
+
+		this.recipeService.delete(1);
+		
+		verify(recipeRepository).delete(any());
 	}
 }
