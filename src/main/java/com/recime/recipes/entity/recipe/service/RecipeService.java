@@ -1,11 +1,14 @@
 package com.recime.recipes.entity.recipe.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.recime.recipes.entity.recipe.dto.IngredientDTO;
 import com.recime.recipes.entity.recipe.dto.InstructionDTO;
 import com.recime.recipes.entity.recipe.dto.RecipeDTO;
 import com.recime.recipes.entity.recipe.exception.InvalidIdException;
+import com.recime.recipes.entity.recipe.exception.RecipeNotFoundException;
 import com.recime.recipes.entity.recipe.mapper.RecipeMapper;
 import com.recime.recipes.entity.recipe.model.Recipe;
 import com.recime.recipes.entity.recipe.repository.RecipeRepository;
@@ -43,5 +46,16 @@ public class RecipeService {
 		recipe = this.recipeRepository.save(recipe);
 		
 		return RecipeMapper.toDto(recipe);
+	}
+
+	public RecipeDTO findById(Integer id) {
+		
+		Optional<Recipe> recipe = this.recipeRepository.findById(id);
+		
+		if(recipe.isEmpty()) {
+			throw new RecipeNotFoundException();
+		}
+		
+		return null;
 	}
 }

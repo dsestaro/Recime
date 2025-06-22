@@ -72,6 +72,43 @@
           "description": "Recipe to be created"
         }
       }
+    },
+    "/recipe/{id}": {
+      "get": {
+        "tags": [
+          "Recipe"
+        ],
+        "summary": "Retrieves a recipe",
+        "operationId": "getRecipe",
+        "description": "Retrieves a recipe from the database",
+        "parameters": [
+          {
+            "name": "ID",
+            "in": "path",
+            "required": true,
+            "description": "ID of the recipe.",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recipe"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe not found."
+          }
+        }
+      }
     }
   },
   "components": {

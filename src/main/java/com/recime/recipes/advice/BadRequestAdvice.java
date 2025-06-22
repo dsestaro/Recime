@@ -21,15 +21,12 @@ import com.recime.recipes.entity.recipe.exception.InvalidIdException;
 import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
-@Slf4j
 public class BadRequestAdvice {
 
 	@ResponseStatus(BAD_REQUEST)
 	@ResponseBody
 	@ExceptionHandler(InvalidIdempotencyException.class)
 	public ErrorMessage methodInvalidIdempotencyException(InvalidIdempotencyException ex) {
-		
-		log.warn(ex.getMessage());
 		
 		ErrorMessage message = new ErrorMessage();
 		
@@ -63,8 +60,6 @@ public class BadRequestAdvice {
 	@ResponseBody
 	@ExceptionHandler(InvalidIdException.class)
 	public ErrorMessage methodInvalidIdException(InvalidIdException ex) {
-		
-		log.warn(ex.getMessage());
 		
 		ErrorMessage message = new ErrorMessage();
 		

@@ -1,6 +1,7 @@
 package com.recime.recipes.entity.recipe.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +34,15 @@ public class RecipeController {
 		return recipe;
     }
 	
-	@GetMapping
-    public String getRecipe(){
-		return "Testing";
+	@GetMapping(path = "/{id}")
+    public RecipeDTO getRecipe(@PathVariable Integer id){
+		log.info("Retreiving recipe with ID {}.", id);
+		
+		RecipeDTO recipe = this.recipeService.findById(id);
+		
+		log.info("Recipe with ID {} found.", id);
+		
+		return recipe;
     }
 
 }
