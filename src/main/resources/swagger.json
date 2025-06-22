@@ -47,6 +47,9 @@
               }
             }
           },
+          "202": {
+            "description": "Recipe already being created"
+          },
           "400": {
             "description": "Bad Request",
             "content": {
