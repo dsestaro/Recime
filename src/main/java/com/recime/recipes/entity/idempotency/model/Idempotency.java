@@ -18,7 +18,7 @@ public class Idempotency {
 	@Id
 	private String key;
 	
-	@Column
+	@Column(columnDefinition = "TEXT")
 	private String response;
 	
 	@Column

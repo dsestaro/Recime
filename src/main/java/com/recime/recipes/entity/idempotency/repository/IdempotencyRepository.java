@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.recime.recipes.entity.idempotency.model.Idempotency;
 
 @Repository
-public interface IdempotencyRespository extends CrudRepository<Idempotency, String> {
+public interface IdempotencyRepository extends CrudRepository<Idempotency, String> {
 
 }
