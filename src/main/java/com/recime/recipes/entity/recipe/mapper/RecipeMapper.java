@@ -1,4 +1,4 @@
-package com.recime.recipes.entity.recipe.mapper;
+	package com.recime.recipes.entity.recipe.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,15 +41,16 @@ public class RecipeMapper {
 		return recipe;
 	}
 
-	private static Ingredient ingredientDtoToEntity(IngredientDTO dto) {
+	public static Ingredient ingredientDtoToEntity(IngredientDTO dto) {
 		Ingredient ingredient = new Ingredient();
 		ingredient.setId(dto.getId());
 		ingredient.setName(dto.getName());
 		ingredient.setQuantity(dto.getQuantity());
+		ingredient.setUnit(dto.getUnit());
 		return ingredient;
 	}
 
-	private static Instruction instructionDtoToEntity(InstructionDTO dto) {
+	public static Instruction instructionDtoToEntity(InstructionDTO dto) {
 		Instruction instruction = new Instruction();
 		instruction.setId(dto.getId());
 		instruction.setText(dto.getText());
@@ -84,7 +85,7 @@ public class RecipeMapper {
 		return dto;
 	}
 
-	private static IngredientDTO ingredientEntityToDto(Ingredient entity) {
+	public static IngredientDTO ingredientEntityToDto(Ingredient entity) {
 		if (entity == null) {
 			return null;
 		}
@@ -93,10 +94,11 @@ public class RecipeMapper {
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setQuantity(entity.getQuantity());
+		dto.setUnit(entity.getUnit());
 		return dto;
 	}
 
-	private static InstructionDTO instructionEntityToDto(Instruction entity) {
+	public static InstructionDTO instructionEntityToDto(Instruction entity) {
 		if (entity == null) {
 			return null;
 		}

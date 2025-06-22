@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.recime.recipes.entity.recipe.exception.IngredientNotFoundException;
 import com.recime.recipes.entity.recipe.exception.RecipeNotFoundException;
 
 @ControllerAdvice
@@ -15,8 +16,16 @@ public class NotFoundAdvice {
 	@ResponseStatus(NOT_FOUND)
 	@ResponseBody
 	@ExceptionHandler(RecipeNotFoundException.class)
-	public void methodInvalidIdempotencyException(RecipeNotFoundException ex) {
+	public String methodInvalidIdException(RecipeNotFoundException ex) {
 		
-		return;
+		return ex.getMessage();
+	}
+	
+	@ResponseStatus(NOT_FOUND)
+	@ResponseBody
+	@ExceptionHandler(IngredientNotFoundException.class)
+	public String methodInvalidIdException(IngredientNotFoundException ex) {
+		
+		return ex.getMessage();
 	}
 }

@@ -23,6 +23,8 @@ import com.recime.recipes.entity.recipe.dto.RecipeDTO;
 import com.recime.recipes.entity.recipe.exception.InvalidIdException;
 import com.recime.recipes.entity.recipe.exception.RecipeNotFoundException;
 import com.recime.recipes.entity.recipe.model.Recipe;
+import com.recime.recipes.entity.recipe.repository.IngredientRepository;
+import com.recime.recipes.entity.recipe.repository.InstructionRepository;
 import com.recime.recipes.entity.recipe.repository.RecipeRepository;
 import com.recime.recipes.utils.RecipeDTOGenerator;
 import com.recime.recipes.utils.RecipeGenerator;
@@ -33,11 +35,17 @@ public class RecipeServiceTests {
 	@Mock
 	private RecipeRepository recipeRepository;
 
+	@Mock
+	private IngredientRepository ingredientRepository;
+	
+	@Mock
+	private InstructionRepository instructionRepository;
+	
 	private RecipeService recipeService;
 
 	@BeforeEach
 	public void configure() {
-		this.recipeService = new RecipeService(recipeRepository);
+		this.recipeService = new RecipeService(recipeRepository, ingredientRepository, instructionRepository);
 	}
 
 	@Test

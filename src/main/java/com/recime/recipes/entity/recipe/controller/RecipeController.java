@@ -3,6 +3,7 @@ package com.recime.recipes.entity.recipe.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,4 +46,14 @@ public class RecipeController {
 		return recipe;
     }
 
+	@PutMapping
+    public RecipeDTO getRecipe(@Valid @RequestBody RecipeDTO recipe){
+		log.info("Updating recipe {}.", recipe.getTitle());
+		
+		recipe = this.recipeService.update(recipe);
+		
+		log.info("Recipe {} updated.", recipe.getTitle());
+		
+		return recipe;
+    }
 }

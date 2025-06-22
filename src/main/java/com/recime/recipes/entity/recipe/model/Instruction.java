@@ -21,6 +21,6 @@ public class Instruction {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
-	@Column
+	@Column(columnDefinition = "TEXT")
 	private String text;
 }
