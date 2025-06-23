@@ -134,7 +134,7 @@
 				"description": "Retrieves a recipe from the database",
 				"parameters": [
 					{
-						"name": "ID",
+						"name": "id",
 						"in": "path",
 						"required": true,
 						"description": "ID of the recipe.",
@@ -177,7 +177,7 @@
 				"description": "Deletes a recipe from the database",
 				"parameters": [
 					{
-						"name": "ID",
+						"name": "id",
 						"in": "path",
 						"required": true,
 						"description": "ID of the recipe.",
@@ -198,6 +198,89 @@
 								"schema": {
 									"type": "string",
 									"example": "Recipe with ID 1 not found."
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/recipes/search": {
+			"get": {
+				"tags": [
+					"Recipe"
+				],
+				"summary": "Search recipes with optional filters",
+				"operationId": "searchRecipes",
+				"description": "Search recipes with optional filters recipes from the database",
+				"parameters": [
+					{
+						"name": "vegetarian",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						},
+						"description": "Filter by vegetarian recipes (true or false)"
+					},
+					{
+						"name": "servings",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "integer",
+							"format": "int32"
+						},
+						"description": "Filter by number of servings"
+					},
+					{
+						"name": "includeIngredients",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"style": "form",
+						"explode": true,
+						"description": "List of ingredient names to include"
+					},
+					{
+						"name": "excludeIngredients",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"style": "form",
+						"explode": true,
+						"description": "List of ingredient names to exclude"
+					},
+					{
+						"name": "instructionContains",
+						"in": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						},
+						"description": "Search for recipes where instructions contain this text"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of matching recipes",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/Recipe"
+									}
 								}
 							}
 						}
