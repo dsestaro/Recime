@@ -39,21 +39,19 @@ Below is the design choices for this project and the reasoning behind them:
 | Repository Layer | Hadles database access | Removes the database access logic from the business logic; allow for moking the database access for testing; enables easier database switch |
 
    * Idempotency Handling
-
-   > The API implements Idempotency-Key support for POSToperations, ensuring  that duplicate client requests do not result in duplicated resource creation. This is achieved through a custom Spring HandlerInterceptor and response wrapper that captures and stores the final response (HTTP status and body) against a unique Idempotency-Key provided in the request header.
+   > The API implements Idempotency-Key support for POSToperations, ensuring  that duplicate client requests do not result in duplicated resource creation. This is done through a custom Spring HandlerInterceptor and a response wrapper that captures and stores the final response against a Idempotency-Key provided in the request header.
    >
-   > If the same Idempotency-Key is reused, the API will return the cached response from the first request with the exact same HTTP status and body, guaranteeing consistent behavior.
+   > If the same Idempotency-Key is reused, the API will return the response from the first request with the same HTTP status and body, guaranteeing consistent behavior.
+
+   * Dynamic Search Filtering
+   > For the recipe search endpoint, the project uses Spring Data JPA Specifications as the design pattern for building dynamic, type-safe, and composable query filters. This approach was chosen because it allows us to dynamically construct complex queries at runtime based on which filters the client provides without writing custom repository methods for every possible filter combination or adding too much rules and queries to the codebase.
+   >
+   > Using Specifications, each filter condition is encapsulated in its own method. These Specification are composed at runtime allowing clean code.
 
    * Unit Test
-   > The project follows a unit testing approach focused on isolating business logic and mocking external dependencies such as repositories and external services. This allows for fast, deterministic, and lightweight tests that validate the behavior of each service and component in isolation.
-   > 
-   > In this project was used JUnit and Mockito. Unit tests cover all service-layer logic, including input validation, error scenarios, void method interactions, and mapper conversions.
+   > The project follows a unit testing approach focused on isolating business logic and mocking external dependencies with this approach we have fast, deterministic, and lightweight tests that validate the behavior of each service and component in isolation. In this project was used JUnit and Mockito.
 
    * Integration Testing
-   > For integration testing, the project uses Spring Boot Test support to validate end-to-end behavior, including controller endpoints, full dependency injection, request validation, and real repository interactions with PostgreSQL.
+   > For integration testing, the project uses Spring Boot Test support to validate end-to-end behavior, including controller endpoints, dependency injection, request validation, and repository interactions with PostgreSQL.
    >
-   > Integration tests focus on verifying that HTTP endpoints behave correctly, with proper status codes, request/response payload validation, input validation errors, and persistence layer interactions. This testing strategy helps ensure that the entire application stack works cohesively, from the web layer down to the database.
-
-
-
-   
+   > The tests focus on verifying that endpoints behave correctly, with correct status codes, request/response payload validation, input validation errors, and persistence layer interactions. This testing strategy helps ensure that the entire application stack works cohesively, from the web layer down to the database.
