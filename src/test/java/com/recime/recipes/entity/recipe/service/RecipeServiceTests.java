@@ -8,16 +8,21 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.recime.recipes.entity.recipe.dto.IngredientDTO;
 import com.recime.recipes.entity.recipe.dto.InstructionDTO;
@@ -307,18 +312,47 @@ public class RecipeServiceTests {
 	
 	@Test
 	public void recipeDeleteExecutesSuccessfullyWhenAnExistingIDIsPassed() {
+		
+		Recipe recipe = RecipeGenerator.populateRecipe();
 
 		doAnswer((Answer<Optional<Recipe>>) invocation -> {
-
-			Recipe recipe = RecipeGenerator.populateRecipe();
-
 			return Optional.ofNullable(recipe);
 		}).when(this.recipeRepository).findById(any());
 		
-		doNothing().when(this.recipeRepository).delete(any());
+		doNothing().when(this.recipeRepository).delete(recipe);
 
 		this.recipeService.delete(1);
 		
-		verify(recipeRepository).delete(any());
+		verify(recipeRepository).delete(recipe);
 	}
+	
+	@Test
+    void searchRecipesShouldCallRepositoryWithSpecificationWhenFiltersAreProvided() {
+        
+		Boolean vegetarian = true;
+        Integer servings = 4;
+        List<String> includeIngredients = Arrays.asList("egg", "flour");
+        List<String> excludeIngredients = Collections.singletonList("sugar");
+        String instructionContains = "bake";
+
+        List<Recipe> mockResults = Arrays.asList(RecipeGenerator.populateRecipe(), RecipeGenerator.populateRecipe());
+
+        when(recipeRepository.findAll(any())).thenReturn(mockResults);
+
+        List<RecipeDTO> result = recipeService.searchRecipes(vegetarian, servings, includeIngredients, excludeIngredients, instructionContains);
+        
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void searchRecipes_noFilters_shouldStillCallRepository() {
+        when(recipeRepository.findAll(any())).thenReturn(Collections.emptyList());
+
+        List<RecipeDTO> result = recipeService.searchRecipes(null, null, null, null, null);
+
+        assertEquals(0, result.size());
+        
+        verify(recipeRepository).findAll(any());
+    }
+
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.recime.recipes.entity.recipe.dto.IngredientDTO;
@@ -21,6 +22,7 @@ import com.recime.recipes.entity.recipe.model.Recipe;
 import com.recime.recipes.entity.recipe.repository.IngredientRepository;
 import com.recime.recipes.entity.recipe.repository.InstructionRepository;
 import com.recime.recipes.entity.recipe.repository.RecipeRepository;
+import com.recime.recipes.entity.recipe.specification.RecipeSpecification;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,7 @@ public class RecipeService {
 	private RecipeRepository recipeRepository;
 	private IngredientRepository ingredientRepository;
 	private InstructionRepository instructionRepository;
-	
+
 	public RecipeDTO create(RecipeDTO recipeDTO) {
 
 		log.debug("Creating new recipe with title {}.", recipeDTO.getTitle());
@@ -129,9 +131,9 @@ public class RecipeService {
 
 		existingRecipe.get().getIngredients().clear();
 		existingRecipe.get().getIngredients().addAll(updatedIngredients);
-		
+
 		List<Instruction> updatedInstructions = new ArrayList<>();
-		
+
 		for (InstructionDTO instructionDTO : recipeDTO.getInstructions()) {
 
 			if (instructionDTO.getId() != null) {
@@ -148,8 +150,8 @@ public class RecipeService {
 					throw new InvalidIdLinkException("instruction", instructionDTO.getId());
 				}
 
-			updatedInstructions.add(RecipeMapper.instructionDtoToEntity(instructionDTO));
-			
+				updatedInstructions.add(RecipeMapper.instructionDtoToEntity(instructionDTO));
+
 			}
 		}
 
@@ -160,7 +162,7 @@ public class RecipeService {
 	}
 
 	public void delete(Integer id) {
-		
+
 		log.debug("Deleting recipe with ID {}.", id);
 
 		Optional<Recipe> recipe = this.recipeRepository.findById(id);
@@ -170,9 +172,30 @@ public class RecipeService {
 
 			throw new RecipeNotFoundException(String.format("Recipe with ID %d not found.", id));
 		}
-		
+
 		this.recipeRepository.delete(recipe.get());
 
 		log.debug("Recipe with ID {} deleted.", id);
+	}
+
+	public List<RecipeDTO> searchRecipes(Boolean vegetarian, Integer servings, List<String> includeIngredients,
+			List<String> excludeIngredients, String instructionContains) {
+
+		log.debug(
+				"Starting recipe search with filters - Vegetarian: {}, Servings: {}, "
+						+ "IncludeIngredients: {}, ExcludeIngredients: {}, InstructionContains: {}",
+				vegetarian, servings, includeIngredients, excludeIngredients, instructionContains);
+
+		Specification<Recipe> spec = RecipeSpecification.isVegetarian(vegetarian)
+				.and(RecipeSpecification.servingsQuantity(servings))
+				.and(RecipeSpecification.includesIngredients(includeIngredients))
+				.and(RecipeSpecification.excludesIngredients(excludeIngredients))
+				.and(RecipeSpecification.instructionContains(instructionContains));
+
+		List<Recipe> results = recipeRepository.findAll(spec);
+
+		log.debug("Recipe search completed with {} recipes found.", results.size());
+
+		return results.stream().map(RecipeMapper::toDto).toList();
 	}
 }
